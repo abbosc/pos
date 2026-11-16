@@ -102,6 +102,18 @@ Database migrations run automatically when the app starts.
 
 You'll get the cash close summary (sales, expenses, expected vs. counted, Farq) and low-stock alerts.
 
+## Sharing a server with other software (e.g. Telegram bots)
+
+- Every service has a memory/CPU cap in `docker-compose.yml`: at most ~1.4 GB RAM and 1.5 CPUs in total.
+  Real use is ~250–300 MB and near-zero CPU.
+- The heavy moment is `docker compose up -d --build` (2–4 min of CPU and ~1–1.5 GB RAM). Run updates
+  outside your bots' busy hours.
+- On servers with 4 GB RAM or less, add swap once so builds can't run out of memory:
+  ```bash
+  fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+  echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  ```
+
 ## Running next to other sites on an existing server
 
 If the server already runs nginx/Caddy/Traefik on ports 80/443, remove the `caddy` service from
