@@ -234,6 +234,17 @@ describe('cash desk', () => {
     expect(closes).toHaveLength(1);
   });
 
+  it('opening cash entered after sales keeps those sales in the open period', async () => {
+    const drinks = await t.ok('GET', '/api/drinks');
+    await t.ok('PUT', `/api/sheets/${today()}`, { lines: [{ drinkId: drinks[0].id, soldQty: 10, giftQty: 0 }] }); // 200 000
+    await t.ok('POST', '/api/cash/close', { counted: 50000, isOpening: true });
+    const status = await t.ok('GET', '/api/cash');
+    expect(status).toMatchObject({ opening: 50000, drinkSales: 200000, expected: 250000 });
+    // The sheet is still editable.
+    await t.ok('PUT', `/api/sheets/${today()}`, { lines: [{ drinkId: drinks[0].id, soldQty: 11, giftQty: 0 }] });
+    expect((await t.ok('GET', '/api/cash')).expected).toBe(270000);
+  });
+
   it('a stand count whose sales were closed cannot be deleted', async () => {
     const p = await snickers();
     const r = await t.ok('POST', '/api/stand-counts', { lines: [{ productId: p.id, counted: 90 }] });

@@ -59,7 +59,7 @@ function OpeningForm() {
     <Card>
       <h2 className="font-bold text-bean-900">Boshlangʻich pul</h2>
       <p className="mt-1 mb-3 text-sm text-stone-600">
-        Kassada hozir qancha pul borligini sanab kiriting. Shundan keyin tizim har bir savdo va xarajatni hisobga olib, kassada qancha boʻlishi kerakligini koʻrsatadi.
+        Kun boshida kassada qancha pul boʻlganini kiriting. Bugun allaqachon kiritilgan savdo va xarajatlar ham hisobga olinadi — tizim kassada qancha boʻlishi kerakligini koʻrsatadi.
       </p>
       <MoneyInput value={amount} onChange={setAmount} autoFocus />
       <Button size="lg" className="mt-3 w-full" disabled={amount === null} loading={save.isPending} onClick={() => save.mutate()}>

@@ -70,7 +70,11 @@ export async function cashStatus(db: Executor) {
 export const closeInput = z.object({
   counted: money,
   note,
-  /** The very first close just records how much money is in the desk. */
+  /**
+   * The very first close just records how much money was in the desk at the start.
+   * It does not swallow records entered before it: sales and expenses already entered
+   * stay in the open period and count towards the first real close.
+   */
   isOpening: z.boolean().default(false),
 });
 
@@ -90,6 +94,7 @@ export async function closeCash(db: DB, raw: unknown) {
       .values({ expected, counted: input.counted, isOpening: input.isOpening, note: input.note })
       .returning();
     const cid = close!.id;
+    if (input.isOpening) return { close: close!, status };
     await tx
       .update(stockMovements)
       .set({ cashCloseId: cid })
