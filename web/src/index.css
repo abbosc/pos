@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bean-50: #faf7f2;
+  --color-bean-100: #f3ebe0;
+  --color-bean-200: #e6d5c0;
+  --color-bean-300: #d4b896;
+  --color-bean-400: #bf9469;
+  --color-bean-500: #a5754a;
+  --color-bean-600: #8a5d38;
+  --color-bean-700: #6e472b;
+  --color-bean-800: #523422;
+  --color-bean-900: #3b2416;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  background: var(--color-bean-50);
+  color: var(--color-stone-900);
+}
+
+body {
+  min-height: 100dvh;
+  overscroll-behavior-y: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
