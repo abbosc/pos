@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { MovementRow } from '../components/MovementRow';
 import { useToast } from '../components/toast';
 import { Badge, Button, Card, Empty, ErrorBox, Field, Modal, NumberInput, Page, Section, Spinner, Tabs, TextInput, Thumb, useConfirm } from '../components/ui';
-import { api, type Movement, type Product } from '../lib/api';
+import { REASON_LABEL, api, type Movement, type Product, type WriteoffReason } from '../lib/api';
 import { som } from '../lib/format';
 import { ProductModal } from './Products';
 
@@ -104,9 +104,10 @@ function WriteOffModal({ p, onClose }: { p: Product; onClose: () => void }) {
   const [from, setFrom] = useState<'stand' | 'warehouse'>(p.standQty > 0 ? 'stand' : 'warehouse');
   const [qty, setQty] = useState<number | null>(null);
   const [note, setNote] = useState('');
+  const [reason, setReason] = useState<WriteoffReason>('gift');
   const have = from === 'stand' ? p.standQty : p.warehouseQty;
   const save = useMutation({
-    mutationFn: () => api.post('/writeoffs', { productId: p.id, from, qty, note }),
+    mutationFn: () => api.post('/writeoffs', { productId: p.id, from, qty, reason, note }),
     onSuccess: () => {
       toast('Hisobdan chiqarildi');
       onClose();
@@ -119,7 +120,7 @@ function WriteOffModal({ p, onClose }: { p: Product; onClose: () => void }) {
       onClose={onClose}
       title="Hisobdan chiqarish"
       footer={
-        <Button size="lg" className="w-full" disabled={!qty || qty > have || !note.trim()} loading={save.isPending} onClick={() => save.mutate()}>
+        <Button size="lg" className="w-full" disabled={!qty || qty > have} loading={save.isPending} onClick={() => save.mutate()}>
           Chiqarish{qty ? ` · ${som(qty * p.avgCost)} zarar` : ''}
         </Button>
       }
@@ -138,8 +139,20 @@ function WriteOffModal({ p, onClose }: { p: Product; onClose: () => void }) {
           <NumberInput value={qty} onChange={setQty} suffix="ta" placeholder="0" />
         </Field>
         {qty !== null && qty > have && <p className="text-sm text-red-700">Faqat {have} ta bor</p>}
-        <Field label="Sababi">
-          <TextInput value={note} onChange={(e) => setNote(e.target.value)} placeholder="Muddati oʻtgan, sovgʻa…" />
+        <div className="grid grid-cols-2 gap-2">
+          {(Object.keys(REASON_LABEL) as WriteoffReason[]).map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setReason(r)}
+              className={`min-h-11 rounded-xl border px-3 py-2 text-left text-sm font-semibold ${reason === r ? 'border-bean-900 bg-bean-900 text-white' : 'border-bean-200 bg-white text-bean-900'}`}
+            >
+              {REASON_LABEL[r]}
+            </button>
+          ))}
+        </div>
+        <Field label="Izoh (ixtiyoriy)">
+          <TextInput value={note} onChange={(e) => setNote(e.target.value)} placeholder="Kimga / nima uchun" />
         </Field>
       </div>
     </Modal>

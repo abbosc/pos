@@ -2,8 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { ImagePicker } from '../components/ImagePicker';
 import { useToast } from '../components/toast';
-import { Badge, Button, Card, ErrorBox, Field, Icon, Modal, MoneyInput, NumberInput, Page, Spinner, TextInput, Thumb, Toggle, useConfirm } from '../components/ui';
-import { api, type Drink } from '../lib/api';
+import { Badge, Button, Card, ErrorBox, Field, Icon, Modal, MoneyInput, NumberInput, Page, Select, Spinner, TextInput, Thumb, Toggle, useConfirm } from '../components/ui';
+import { api, type Container, type Drink } from '../lib/api';
 import { som } from '../lib/format';
 
 export function DrinkMenuPage() {
@@ -54,7 +54,7 @@ export function DrinkMenuPage() {
                     <Thumb src={d.imagePath} name={d.name} size="sm" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="truncate text-sm font-medium">{d.name}</span>
+                        <span className="text-sm leading-snug font-semibold [overflow-wrap:anywhere]">{d.name}</span>
                         {!d.active && <Badge tone="muted">Faol emas</Badge>}
                       </div>
                       <div className="text-xs text-stone-500">
@@ -90,10 +90,13 @@ function DrinkModal({ drink, groups, onClose }: { drink: Drink | null; groups: s
   const [costPerCup, setCostPerCup] = useState<number | null>(drink?.costPerCup ?? null);
   const [sortOrder, setSortOrder] = useState<number | null>(drink?.sortOrder ?? null);
   const [active, setActive] = useState(drink?.active ?? true);
+  const [containerId, setContainerId] = useState<number | null>(drink?.containerId ?? null);
+  const [allowCup, setAllowCup] = useState(drink?.allowCup ?? false);
+  const containers = useQuery({ queryKey: ['containers'], queryFn: () => api.get<Container[]>('/containers') });
 
   const save = useMutation({
     mutationFn: () => {
-      const body = { name, groupName, price, costPerCup, active, ...(sortOrder !== null ? { sortOrder } : {}) };
+      const body = { name, groupName, price, costPerCup, containerId, allowCup, active, ...(sortOrder !== null ? { sortOrder } : {}) };
       return drink ? api.patch(`/drinks/${drink.id}`, body) : api.post('/drinks', body);
     },
     onSuccess: () => {
@@ -179,6 +182,19 @@ function DrinkModal({ drink, groups, onClose }: { drink: Drink | null; groups: s
             </>
           )}
         </p>
+        <Field label="Idish" hint="Bu ichimlik doim shu butilkada beriladi">
+          <Select value={containerId ?? ''} onChange={(e) => setContainerId(e.target.value ? Number(e.target.value) : null)}>
+            <option value="">Tanlanmagan</option>
+            {(containers.data ?? [])
+              .filter((c) => !c.isCup)
+              .map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+          </Select>
+        </Field>
+        <Toggle checked={allowCup} onChange={setAllowCup} label="Stakanda ham beriladi" hint="Varaqda “Stakanda” ustuni chiqadi (kofe uchun)" />
         <Field label="Tartib raqami" hint="Kichik raqam roʻyxatda yuqorida turadi">
           <NumberInput value={sortOrder} onChange={setSortOrder} placeholder="avtomatik" />
         </Field>

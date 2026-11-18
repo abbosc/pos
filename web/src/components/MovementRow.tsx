@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { Movement, MovementKind } from '../lib/api';
+import { REASON_LABEL, type Movement, type MovementKind } from '../lib/api';
 import { dateTime, som } from '../lib/format';
 import { Badge } from './ui';
 
@@ -41,7 +41,7 @@ export function MovementRow({ m, showProduct = true }: { m: Movement; showProduc
     <div className="flex items-start gap-3 p-3 text-sm">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge tone={KIND_TONE[m.kind]}>{KIND_LABEL[m.kind]}</Badge>
+          <Badge tone={KIND_TONE[m.kind]}>{m.kind === 'writeoff' && m.reason ? REASON_LABEL[m.reason] : KIND_LABEL[m.kind]}</Badge>
           {showProduct && (
             <Link to={`/mahsulotlar/${m.productId}`} className="font-medium">
               {m.productName}

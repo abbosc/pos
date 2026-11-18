@@ -16,7 +16,8 @@ export function setupApp() {
   beforeEach(async () => {
     await db.execute(sql`
       truncate cash_closes, products, purchases, stand_counts, stock_movements, drinks,
-        drink_sheets, drink_sheet_lines, expense_categories, expenses, cash_movements
+        drink_sheets, drink_sheet_lines, expense_categories, expenses, cash_movements,
+        containers, container_movements, drink_sheet_container_counts
       restart identity cascade
     `);
     await seedDefaults(db);

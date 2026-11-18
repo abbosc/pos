@@ -98,6 +98,8 @@ export const stockMovements = pgTable(
     standCountId: integer('stand_count_id').references(() => standCounts.id, { onDelete: 'cascade' }),
     /** Set on sales once the cash desk is closed. */
     cashCloseId: integer('cash_close_id').references(() => cashCloses.id),
+    /** Write-offs: gift | staff | spoiled | other. */
+    reason: text('reason'),
     note: text('note'),
     createdAt: createdAt(),
   },
@@ -106,6 +108,23 @@ export const stockMovements = pgTable(
     index('stock_movements_created_idx').on(t.createdAt),
     index('stock_movements_open_sales_idx').on(t.kind).where(sql`${t.cashCloseId} is null`),
   ],
+);
+
+/** Bottles and cups drinks are served in. Stock may go negative if usage is recorded before stock. */
+export const containers = pgTable(
+  'containers',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    /** The cup used when a drink (coffee) is served in a cup instead of its bottle. */
+    isCup: boolean('is_cup').notNull().default(false),
+    stockQty: integer('stock_qty').notNull().default(0),
+    lowStockLevel: integer('low_stock_level').notNull().default(0),
+    sortOrder: integer('sort_order').notNull().default(0),
+    active: boolean('active').notNull().default(true),
+    createdAt: createdAt(),
+  },
+  (t) => [uniqueIndex('containers_name_uq').on(sql`lower(${t.name})`)],
 );
 
 /** Drinks made at the bar (sold by the paper sheet). */
@@ -118,6 +137,10 @@ export const drinks = pgTable(
     price: integer('price').notNull(),
     /** Estimated ingredient cost of one cup. Null = not set yet. */
     costPerCup: integer('cost_per_cup'),
+    /** The bottle this drink is always served in. */
+    containerId: integer('container_id').references(() => containers.id, { onDelete: 'set null' }),
+    /** Can also be served in a cup (coffee). */
+    allowCup: boolean('allow_cup').notNull().default(false),
     imagePath: text('image_path'),
     sortOrder: integer('sort_order').notNull().default(0),
     active: boolean('active').notNull().default(true),
@@ -147,13 +170,33 @@ export const drinkSheetLines = pgTable(
       .references(() => drinks.id),
     soldQty: integer('sold_qty').notNull().default(0),
     giftQty: integer('gift_qty').notNull().default(0),
+    /** How many of sold + gift were served in a cup instead of the bottle. */
+    cupQty: integer('cup_qty').notNull().default(0),
     unitPrice: integer('unit_price').notNull(),
     unitCost: integer('unit_cost'),
+    /** Bottle used on that day. */
+    containerId: integer('container_id').references(() => containers.id, { onDelete: 'set null' }),
   },
   (t) => [
     primaryKey({ columns: [t.sheetId, t.drinkId] }),
     check('drink_lines_qty_nonneg', sql`${t.soldQty} >= 0 and ${t.giftQty} >= 0`),
+    check('drink_lines_cup_le_total', sql`${t.cupQty} >= 0 and ${t.cupQty} <= ${t.soldQty} + ${t.giftQty}`),
   ],
+);
+
+/** Containers actually counted as used on a sheet's day, to compare with the sheet. */
+export const drinkSheetContainerCounts = pgTable(
+  'drink_sheet_container_counts',
+  {
+    sheetId: integer('sheet_id')
+      .notNull()
+      .references(() => drinkSheets.id, { onDelete: 'cascade' }),
+    containerId: integer('container_id')
+      .notNull()
+      .references(() => containers.id, { onDelete: 'cascade' }),
+    countedUsed: integer('counted_used').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.sheetId, t.containerId] })],
 );
 
 export const expenseCategories = pgTable('expense_categories', {
@@ -198,4 +241,28 @@ export const cashMovements = pgTable(
     createdAt: createdAt(),
   },
   (t) => [check('cash_movements_amount_pos', sql`${t.amount} > 0`)],
+);
+
+export const containerMovementKind = pgEnum('container_movement_kind', [
+  'purchase', // received into stock
+  'usage', // used by a drinks sheet
+  'count', // stock count correction
+  'writeoff', // broken / thrown away
+]);
+
+export const containerMovements = pgTable(
+  'container_movements',
+  {
+    id: serial('id').primaryKey(),
+    containerId: integer('container_id')
+      .notNull()
+      .references(() => containers.id, { onDelete: 'cascade' }),
+    kind: containerMovementKind('kind').notNull(),
+    delta: integer('delta').notNull(),
+    sheetId: integer('sheet_id').references(() => drinkSheets.id, { onDelete: 'cascade' }),
+    expenseId: integer('expense_id').references(() => expenses.id, { onDelete: 'set null' }),
+    note: text('note'),
+    createdAt: createdAt(),
+  },
+  (t) => [index('container_movements_container_idx').on(t.containerId, t.createdAt)],
 );

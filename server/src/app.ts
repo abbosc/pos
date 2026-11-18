@@ -15,6 +15,7 @@ import { bus } from './lib/events.js';
 import { MAX_UPLOAD_BYTES, removeImage, saveImage } from './lib/images.js';
 import { today } from './lib/time.js';
 import * as cash from './services/cash.js';
+import * as containersSvc from './services/containers.js';
 import * as drinks from './services/drinks.js';
 import * as expenses from './services/expenses.js';
 import * as productsSvc from './services/products.js';
@@ -131,6 +132,7 @@ export function createApp(db: DB) {
     return c.json({ ok: true });
   });
   api.post('/writeoffs', async (c) => c.json(await stock.writeOff(db, await readJson(c))));
+  api.post('/writeoffs/bulk', async (c) => c.json(await stock.writeOffMany(db, await readJson(c))));
   api.post('/corrections', async (c) => c.json(await stock.correctStock(db, await readJson(c))));
 
   // ─── Drinks ──────────────────────────────────────────────────────────────
@@ -162,6 +164,23 @@ export function createApp(db: DB) {
   api.put('/sheets/:date', async (c) => c.json(await drinks.saveSheet(db, c.req.param('date'), await readJson(c))));
   api.delete('/sheets/:date', async (c) => {
     await drinks.deleteSheet(db, c.req.param('date'));
+    return c.json({ ok: true });
+  });
+
+  // ─── Containers (bottles, cups) ──────────────────────────────────────────
+  api.get('/containers', async (c) =>
+    c.json(await containersSvc.listContainers(db, { includeInactive: c.req.query('all') === '1' })),
+  );
+  api.post('/containers', async (c) => c.json(await containersSvc.createContainer(db, await readJson(c)), 201));
+  api.patch('/containers/:id', async (c) =>
+    c.json(await containersSvc.updateContainer(db, parse(idParam, c.req.param('id')), await readJson(c))),
+  );
+  api.post('/containers/receive', async (c) => c.json(await containersSvc.receiveContainers(db, await readJson(c)), 201));
+  api.post('/containers/count', async (c) => c.json(await containersSvc.countContainers(db, await readJson(c))));
+  api.post('/containers/writeoff', async (c) => c.json(await containersSvc.writeOffContainers(db, await readJson(c))));
+  api.get('/container-movements', async (c) => c.json(await containersSvc.listContainerMovements(db, c.req.query())));
+  api.delete('/container-movements/:id', async (c) => {
+    await containersSvc.deleteContainerMovement(db, parse(idParam, c.req.param('id')));
     return c.json({ ok: true });
   });
 

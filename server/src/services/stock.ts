@@ -379,39 +379,78 @@ export async function deleteStandCount(db: DB, countId: number) {
 
 // ─── Write-offs and corrections ───────────────────────────────────────────────
 
+export const WRITEOFF_REASONS = ['gift', 'staff', 'spoiled', 'other'] as const;
+const reason = z.enum(WRITEOFF_REASONS).default('other');
+
 export const writeOffInput = z.object({
   productId: id,
   from: z.enum(['warehouse', 'stand']),
   qty: positiveQty,
+  /** gift = given away, staff = eaten by us, spoiled = expired / damaged. */
+  reason,
   note,
 });
 
-/** Remove goods that were not sold: expired, damaged, given away. Counted as a loss at cost. */
+export const writeOffManyInput = z.object({
+  from: z.enum(['warehouse', 'stand']).default('stand'),
+  reason,
+  note,
+  lines: z.array(z.object({ productId: id, qty: positiveQty })).min(1, 'kamida bitta mahsulot kiriting'),
+});
+
+/**
+ * Remove goods that were not sold: given away, eaten by staff, expired or damaged.
+ * Counted as a loss at cost, never as a sale. Record these BEFORE counting the stand,
+ * otherwise the count would treat them as sold.
+ */
+export async function writeOffMany(db: DB, raw: unknown) {
+  const input = parse(writeOffManyInput, raw);
+  return db.transaction(async (tx) => {
+    const locked = await lockProducts(
+      tx,
+      input.lines.map((l) => l.productId),
+    );
+    let qtyTotal = 0;
+    let costTotal = 0;
+    for (const line of input.lines) {
+      const p = locked.get(line.productId)!;
+      const have = input.from === 'warehouse' ? p.warehouseQty : p.standQty;
+      if (have < line.qty) {
+        throw new AppError(409, `${p.name}: ${input.from === 'warehouse' ? 'omborda' : 'vitrinada'} faqat ${have} ta bor`);
+      }
+      const wd = input.from === 'warehouse' ? -line.qty : 0;
+      const sd = input.from === 'stand' ? -line.qty : 0;
+      await tx
+        .update(products)
+        .set({ warehouseQty: p.warehouseQty + wd, standQty: p.standQty + sd })
+        .where(eq(products.id, p.id));
+      await tx.insert(stockMovements).values({
+        productId: p.id,
+        kind: 'writeoff',
+        warehouseDelta: wd,
+        standDelta: sd,
+        unitPrice: p.sellPrice,
+        unitCost: p.avgCost,
+        reason: input.reason,
+        note: input.note,
+      });
+      qtyTotal += line.qty;
+      costTotal += line.qty * p.avgCost;
+    }
+    return { qty: qtyTotal, cost: costTotal };
+  });
+}
+
+/** Single-product write-off (product page). */
 export async function writeOff(db: DB, raw: unknown) {
   const input = parse(writeOffInput, raw);
-  return db.transaction(async (tx) => {
-    const p = (await lockProducts(tx, [input.productId])).get(input.productId)!;
-    const have = input.from === 'warehouse' ? p.warehouseQty : p.standQty;
-    if (have < input.qty) {
-      throw new AppError(409, `${p.name}: ${input.from === 'warehouse' ? 'omborda' : 'vitrinada'} faqat ${have} ta bor`);
-    }
-    const wd = input.from === 'warehouse' ? -input.qty : 0;
-    const sd = input.from === 'stand' ? -input.qty : 0;
-    await tx
-      .update(products)
-      .set({ warehouseQty: p.warehouseQty + wd, standQty: p.standQty + sd })
-      .where(eq(products.id, p.id));
-    await tx.insert(stockMovements).values({
-      productId: p.id,
-      kind: 'writeoff',
-      warehouseDelta: wd,
-      standDelta: sd,
-      unitPrice: p.sellPrice,
-      unitCost: p.avgCost,
-      note: input.note,
-    });
-    return { ok: true };
+  await writeOffMany(db, {
+    from: input.from,
+    reason: input.reason,
+    note: input.note,
+    lines: [{ productId: input.productId, qty: input.qty }],
   });
+  return { ok: true };
 }
 
 export const correctionInput = z.object({

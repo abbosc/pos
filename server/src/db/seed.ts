@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import type { DB } from './index.js';
-import { drinks, expenseCategories } from './schema.js';
+import { containers, drinks, expenseCategories } from './schema.js';
 
 /** Default data for a fresh database: the drink menu from the paper sheet and expense categories. */
 const DRINK_MENU: [group: string, items: [name: string, priceThousands: number][]][] = [
@@ -21,6 +21,7 @@ const DRINK_MENU: [group: string, items: [name: string, priceThousands: number][
 const CATEGORIES = ['Mahsulot xaridi', 'Kofe donlari', 'Sut', 'Siroplar', 'Meva va ingredientlar', 'Stakan va qopqoqlar', 'Jihozlar', 'Boshqa'];
 
 export async function seedDefaults(db: DB) {
+  await seedContainers(db);
   const [{ count: drinkCount }] = (await db.select({ count: sql<number>`count(*)::int` }).from(drinks)) as [{ count: number }];
   if (drinkCount === 0) {
     let sort = 0;
@@ -38,4 +39,15 @@ export async function seedDefaults(db: DB) {
       .values(CATEGORIES.map((name, i) => ({ name, sortOrder: i === 0 ? -1 : i * 10 })))
       .onConflictDoNothing();
   }
+}
+
+export const DEFAULT_CONTAINERS = [
+  { name: 'Kraft butilka', isCup: false, sortOrder: 10 },
+  { name: 'Shaffof butilka', isCup: false, sortOrder: 20 },
+  { name: 'Stakan', isCup: true, sortOrder: 30 },
+];
+
+export async function seedContainers(db: DB) {
+  const [{ count }] = (await db.select({ count: sql<number>`count(*)::int` }).from(containers)) as [{ count: number }];
+  if (count === 0) await db.insert(containers).values(DEFAULT_CONTAINERS).onConflictDoNothing();
 }

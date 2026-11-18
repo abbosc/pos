@@ -70,6 +70,38 @@ export type Movement = {
   unitCost: number;
   purchaseId: number | null;
   standCountId: number | null;
+  reason: WriteoffReason | null;
+  note: string | null;
+  createdAt: string;
+};
+
+export type WriteoffReason = 'gift' | 'staff' | 'spoiled' | 'other';
+
+export const REASON_LABEL: Record<WriteoffReason, string> = {
+  gift: 'Sovgʻa',
+  staff: 'Oʻzimiz yedik',
+  spoiled: 'Buzilgan / muddati oʻtgan',
+  other: 'Boshqa',
+};
+
+export type Container = {
+  id: number;
+  name: string;
+  isCup: boolean;
+  stockQty: number;
+  lowStockLevel: number;
+  sortOrder: number;
+  active: boolean;
+};
+
+export type ContainerMovement = {
+  id: number;
+  containerId: number;
+  containerName: string;
+  kind: 'purchase' | 'usage' | 'count' | 'writeoff';
+  delta: number;
+  sheetDate: string | null;
+  hasExpense: boolean;
   note: string | null;
   createdAt: string;
 };
@@ -80,6 +112,8 @@ export type Drink = {
   groupName: string;
   price: number;
   costPerCup: number | null;
+  containerId: number | null;
+  allowCup: boolean;
   imagePath: string | null;
   sortOrder: number;
   active: boolean;
@@ -92,8 +126,11 @@ export type SheetLine = {
   imagePath: string | null;
   price: number;
   costPerCup: number | null;
+  containerId: number | null;
+  allowCup: boolean;
   soldQty: number;
   giftQty: number;
+  cupQty: number;
 };
 
 export type Sheet = {
@@ -103,7 +140,10 @@ export type Sheet = {
   locked: boolean;
   updatedAt: string | null;
   lines: SheetLine[];
-  totals: { soldQty: number; giftQty: number; revenue: number };
+  totals: { soldQty: number; giftQty: number; cupQty: number; revenue: number };
+  cupContainerId: number | null;
+  containerCounts: { containerId: number; countedUsed: number }[];
+  containerUsage: { containerId: number; used: number }[];
 };
 
 export type SheetSummary = { date: string; locked: boolean; soldQty: number; giftQty: number; revenue: number };
@@ -219,6 +259,8 @@ export type Summary = {
     writeoffCost: number;
   }[];
   byCategory: { id: number; name: string; total: number; count: number }[];
+  writeoffsByReason: { reason: WriteoffReason; qty: number; cost: number }[];
+  containerUsage: { id: number; name: string; used: number }[];
   purchaseCategory: string;
 };
 

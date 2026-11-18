@@ -9,6 +9,8 @@ const ACTIONS = [
   { to: '/varaq', label: 'Ichimliklar varagʻi', icon: 'sheet' },
   { to: '/toldirish', label: 'Vitrinani toʻldirish', icon: 'refill' },
   { to: '/xarid', label: 'Mahsulot xaridi', icon: 'cart' },
+  { to: '/chiqim', label: 'Sovgʻa / yeyilgan', icon: 'tag' },
+  { to: '/idishlar', label: 'Idishlar', icon: 'cup' },
   { to: '/xarajatlar?yangi=1', label: 'Xarajat qoʻshish', icon: 'wallet' },
   { to: '/kassa', label: 'Kassani yopish', icon: 'cash' },
 ];

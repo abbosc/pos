@@ -4,7 +4,7 @@ import type { DB } from '../db/index.js';
 import { expenseCategories, expenses } from '../db/schema.js';
 import { AppError, notFound, parse } from '../lib/errors.js';
 import { today } from '../lib/time.js';
-import { id, isoDate, note, positiveMoney } from '../lib/validators.js';
+import { id, isoDate, note, patchOf, positiveMoney } from '../lib/validators.js';
 
 // ─── Categories ───────────────────────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ export async function createCategory(db: DB, raw: unknown) {
 }
 
 export async function updateCategory(db: DB, categoryId: number, raw: unknown) {
-  const input = parse(categoryInput.partial(), raw);
+  const input = parse(patchOf(categoryInput), raw);
   try {
     const [c] = await db.update(expenseCategories).set(input).where(eq(expenseCategories.id, categoryId)).returning();
     if (!c) throw notFound('Turkum');
@@ -112,7 +112,7 @@ async function getEditable(db: DB, expenseId: number) {
 }
 
 export async function updateExpense(db: DB, expenseId: number, raw: unknown) {
-  const input = parse(expenseInput.partial(), raw);
+  const input = parse(patchOf(expenseInput), raw);
   await getEditable(db, expenseId);
   if (input.categoryId) await assertCategory(db, input.categoryId);
   const [e] = await db.update(expenses).set(input).where(eq(expenses.id, expenseId)).returning();

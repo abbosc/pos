@@ -168,6 +168,32 @@ export async function summary(db: DB, raw: unknown) {
     `)) as unknown as Record<string, unknown>[]
   ).map((r) => ({ id: n(r.id), name: String(r.name), total: n(r.total), count: n(r.count) }));
 
+  const writeoffsByReason = (
+    (await db.execute(sql`
+      select coalesce(reason, 'other') as reason,
+        sum(-(warehouse_delta + stand_delta)) as qty,
+        sum(-(warehouse_delta + stand_delta) * unit_cost) as cost
+      from stock_movements
+      where kind = 'writeoff'
+        and created_at >= (${from}::date::timestamp at time zone ${TZ})
+        and created_at < ((${to}::date + 1)::timestamp at time zone ${TZ})
+      group by 1
+      order by cost desc
+    `)) as unknown as Record<string, unknown>[]
+  ).map((r) => ({ reason: String(r.reason), qty: n(r.qty), cost: n(r.cost) }));
+
+  const containerUsage = (
+    (await db.execute(sql`
+      select c.id, c.name, sum(-m.delta) as used
+      from container_movements m
+      join drink_sheets s on s.id = m.sheet_id
+      join containers c on c.id = m.container_id
+      where m.kind = 'usage' and s.date between ${from}::date and ${to}::date
+      group by c.id
+      order by c.sort_order, c.id
+    `)) as unknown as Record<string, unknown>[]
+  ).map((r) => ({ id: n(r.id), name: String(r.name), used: n(r.used) }));
+
   const t = byDay.reduce(
     (a, d) => {
       a.drinkRevenue += d.drinkRevenue;
@@ -216,6 +242,8 @@ export async function summary(db: DB, raw: unknown) {
     byDrink,
     byProduct,
     byCategory,
+    writeoffsByReason,
+    containerUsage,
     purchaseCategory: PURCHASE_CATEGORY,
   };
 }

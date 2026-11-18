@@ -85,7 +85,7 @@ export function ProductsPage() {
                   <Thumb src={p.imagePath} name={p.name} />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="truncate font-medium">{p.name}</span>
+                      <span className="leading-snug font-semibold [overflow-wrap:anywhere]">{p.name}</span>
                       {!p.active && <Badge tone="muted">Faol emas</Badge>}
                     </div>
                     <div className="text-xs text-stone-500">

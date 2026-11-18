@@ -8,6 +8,8 @@ const LINKS = [
   { to: '/xarajatlar', label: 'Xarajatlar', sub: 'Sut, kofe, stakan va boshqa xarajatlar', icon: 'wallet' },
   { to: '/xarid', label: 'Mahsulot xaridi', sub: 'Omborga yangi mahsulot', icon: 'cart' },
   { to: '/toldirish', label: 'Vitrinani toʻldirish', sub: 'Ombordan vitrinaga', icon: 'refill' },
+  { to: '/chiqim', label: 'Sovgʻa / yeyilgan', sub: 'Sotilmagan sneklar: sovgʻa, oʻzimiz yedik, buzilgan', icon: 'tag' },
+  { to: '/idishlar', label: 'Idishlar', sub: 'Kraft, shaffof butilka va stakanlar', icon: 'cup' },
   { to: '/mahsulotlar', label: 'Mahsulotlar', sub: 'Sneklar, narxlar, rasmlar, qoldiq', icon: 'box' },
   { to: '/ichimliklar', label: 'Ichimliklar menyusi', sub: 'Narx va bir stakan tannarxi', icon: 'cup' },
   { to: '/tarix', label: 'Ombor tarixi', sub: 'Barcha xarid, sotuv va tuzatishlar', icon: 'history' },

@@ -5,6 +5,7 @@ import { Layout } from './components/Layout';
 import { Spinner } from './components/ui';
 import { api } from './lib/api';
 import { CashPage } from './pages/Cash';
+import { ContainersPage } from './pages/Containers';
 import { DashboardPage } from './pages/Dashboard';
 import { DrinkMenuPage } from './pages/DrinkMenu';
 import { ExpensesPage } from './pages/Expenses';
@@ -18,6 +19,7 @@ import { RefillPage } from './pages/Refill';
 import { ReportsPage } from './pages/Reports';
 import { SheetPage } from './pages/Sheet';
 import { StandCountPage } from './pages/StandCount';
+import { WriteOffPage } from './pages/WriteOff';
 
 export function App() {
   const qc = useQueryClient();
@@ -47,6 +49,8 @@ export function App() {
         <Route path="ichimliklar" element={<DrinkMenuPage />} />
         <Route path="hisobot" element={<ReportsPage />} />
         <Route path="tarix" element={<HistoryPage />} />
+        <Route path="idishlar" element={<ContainersPage />} />
+        <Route path="chiqim" element={<WriteOffPage />} />
         <Route path="yana" element={<MorePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

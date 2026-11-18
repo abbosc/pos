@@ -8,12 +8,13 @@
 | Snek savdosini yozmoqchiman | **Sanash** — vitrinada hozir nechta borligini kiriting. Kamaygani — sotilgan |
 | Doʻkondan snek sotib oldim | **Yana → Mahsulot xaridi** — soni va jami narxi. Omborga qoʻshiladi, xarajat oʻzi yoziladi |
 | Sut, kofe, stakan va hokazo sotib oldim | **Yana → Xarajatlar → Qoʻshish** |
-| Mahsulot muddati oʻtdi / buzildi / sovgʻa qilindi | **Yana → Mahsulotlar → mahsulot → Hisobdan chiqarish** |
+| Snekni sovgʻa qildik / oʻzimiz yedik / buzildi | **Asosiy → Sovgʻa / yeyilgan** — sabab va sonini kiriting. **Vitrinani sanashdan oldin!** |
+| Butilka yoki stakan keldi | **Yana → Idishlar → Kirim** |
 | Kassadan pul oldim (egasiga topshirdim) | **Kassa → Pul olish / qoʻyish** |
 
 ## Kun oxirida
 
-1. **Varaq** — qogʻoz varaqdagi har bir ichimlikning “Sotildi” va “Sovgʻa” sonini kiriting → **Saqlash**.
+1. **Varaq** — qogʻoz varaqdagi har bir ichimlikning “Sotildi”, “Sovgʻa” va “Stakanda” sonini kiriting. Pastdagi **Idishlar tekshiruvi**ga bugun ishlatilgan kraft, shaffof butilka va stakanlar sonini yozing — varaq bilan mos kelishi kerak (✓). → **Saqlash**.
 2. **Sanash** — vitrinadagi sneklarni sanang → **Saqlash** → **Tasdiqlash**.
 3. **Kassa** — kassadagi pulni sanang va kiriting. **Farq** koʻrinadi → **Kassani yopish**.
 4. Ertaga uchun qancha mayda pul qoldirishingizni kiriting → **Olish**.
@@ -27,6 +28,7 @@
 
 ## Maslahatlar
 
+- **Bir martalik sozlash:** Yana → Idishlar → “Ichimliklar idishi”da har bir ichimlik uchun **Kraft** yoki **Shaffof** ni tanlang, kofelar uchun **+ Stakan** ni ham belgilang.
 - Snek narxini oʻzgartirishdan **oldin** vitrinani sanang — aks holda oldingi savdo yangi narxda hisoblanadi.
 - Har bir ichimlikka **bir stakan tannarxini** kiriting (Yana → Ichimliklar menyusi) — shunda hisobotda har bir ichimlik foydasi koʻrinadi.
 - Mahsulotga **ogohlantirish chegarasi** qoʻying — vitrinada kam qolsa, bosh sahifada eslatma chiqadi.

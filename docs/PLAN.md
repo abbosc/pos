@@ -29,6 +29,14 @@ Farq (difference) = counted cash − expected cash
 | Ichimliklar menyusi | `/ichimliklar` | Drinks, groups, price, **cost per cup** → profit per drink. Photo. Setting a cost fills it into earlier sheets that had none |
 | Hisobot | `/hisobot` | Today / yesterday / week / month / last month / custom. Sales, profit, expenses, cash flow; daily sales chart; per drink, per snack, per expense category, per day tables |
 | Ombor tarixi | `/tarix` | Every stock movement, filterable |
+| Sovgʻa / yeyilgan | `/chiqim` | Snacks that left without a sale — gift, eaten by staff, spoiled, other — several products at once, from stand or warehouse. Must be entered before the stand count. Shown in reports by reason, at cost |
+| Idishlar | `/idishlar` | Kraft bottles, transparent bottles, cups: stock, receive (optional price → expense), count (shows difference), write-off, history. Each drink is assigned one bottle type, and "+ Stakan" if it can also be served in a cup |
+
+### Bottles and cups
+- The sheet has a **Stakanda** column for drinks marked "+ Stakan": how many of sold + gift were served in a cup.
+- Saving a sheet uses: (sold + gift − in cup) of the drink's bottle, plus (in cup) cups. Re-saving replaces the
+  previous usage; deleting the sheet gives it back.
+- **Idishlar tekshiruvi** on the sheet: enter the bottles and cups actually used that day; each shows ✓ or the difference.
 
 ### Rules that keep the numbers honest
 - **Snack sale price** is taken at the moment of the count. Count the stand *before* changing a sell price.
@@ -53,6 +61,8 @@ Farq (difference) = counted cash − expected cash
 | `drink_sheets` / `drink_sheet_lines` | One sheet per date; lines hold sold_qty, gift_qty and the price/cost of that day |
 | `expense_categories` / `expenses` | Expenses with category, amount, paid_from_cash; `purchase_id` when created by a purchase |
 | `cash_movements` | Money taken out of / put into the desk |
+| `containers` / `container_movements` | Bottle and cup stock; movements: purchase, usage (from a sheet), count, writeoff |
+| `drink_sheet_container_counts` | Containers counted as used on a sheet's day |
 | `cash_closes` | Each close: expected, counted (difference = counted − expected). The counted amount opens the next period |
 
 Cash-affecting rows carry `cash_close_id`: `NULL` = belongs to the current open period.

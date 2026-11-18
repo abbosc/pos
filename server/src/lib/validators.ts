@@ -14,3 +14,17 @@ export const note = z
   .nullable()
   .transform((v) => (v ? v : null));
 export const name = z.string().trim().min(1, 'nom kiritilmagan').max(100);
+
+/**
+ * Like schema.partial(), but fields that are not sent stay undefined instead of being filled with
+ * their defaults — so a PATCH only changes what it sends.
+ */
+export function patchOf<T extends z.ZodRawShape>(schema: z.ZodObject<T>) {
+  const shape: Record<string, z.ZodType> = {};
+  for (const [key, field] of Object.entries(schema.shape)) {
+    let f = field as z.ZodType;
+    while (f instanceof z.ZodDefault) f = f.unwrap() as z.ZodType;
+    shape[key] = f.optional();
+  }
+  return z.object(shape) as unknown as z.ZodObject<{ [K in keyof T]: z.ZodOptional<T[K]> }>;
+}

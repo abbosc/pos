@@ -2,7 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToast } from '../components/toast';
-import { Badge, Button, Card, Empty, ErrorBox, Modal, NumberInput, Page, Section, Spinner, TextInput, Thumb, Toggle, cx, useConfirm } from '../components/ui';
+import { QtyRow } from '../components/QtyRow';
+import { Badge, Button, Card, Empty, ErrorBox, Icon, Modal, Page, Section, Spinner, TextInput, Toggle, cx, useConfirm } from '../components/ui';
 import { api, type Product, type StandCountResult, type StandCountSummary } from '../lib/api';
 import { dateTime, num, som } from '../lib/format';
 
@@ -59,6 +60,11 @@ export function StandCountPage() {
       <p className="-mt-2 mb-3 text-sm text-stone-600">
         Vitrinada hozir nechta borligini kiriting. Tizim oxirgi sanoqdan beri qancha sotilganini hisoblaydi. Hammasini sanash shart emas.
       </p>
+      <Link to="/chiqim" className="mb-3 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+        <Icon name="tag" className="size-5 shrink-0" />
+        <span className="flex-1">Sovgʻa qilingan yoki oʻzimiz yegan sneklar boʻlsa, sanashdan <b>oldin</b> shu yerga yozing</span>
+        <Icon name="chevron" className="size-4" />
+      </Link>
 
       {products.isPending ? (
         <Spinner />
@@ -78,24 +84,25 @@ export function StandCountPage() {
               const v = counts[p.id] ?? null;
               const sold = v !== null ? p.standQty - v : 0;
               return (
-                <div key={p.id} className="flex items-center gap-3 p-3">
-                  <Thumb src={p.imagePath} name={p.name} />
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate font-medium">{p.name}</div>
-                    <div className="text-xs text-stone-500">
-                      Kutilgan: <b className="tabular text-stone-700">{p.standQty}</b> · {som(p.sellPrice)}
-                    </div>
-                    {v !== null && sold > 0 && <div className="text-xs font-semibold text-emerald-700">Sotildi: {sold} ta = {som(sold * p.sellPrice)}</div>}
-                    {v !== null && sold < 0 && <div className="text-xs font-semibold text-amber-700">Kutilganidan {-sold} ta koʻp</div>}
-                  </div>
-                  <NumberInput
-                    className="w-24"
-                    placeholder={String(p.standQty)}
-                    value={v}
-                    aria-label={`${p.name} soni`}
-                    onChange={(val) => setCounts((c) => ({ ...c, [p.id]: val }))}
-                  />
-                </div>
+                <QtyRow
+                  key={p.id}
+                  image={p.imagePath}
+                  name={p.name}
+                  value={v}
+                  placeholder={String(p.standQty)}
+                  onChange={(val) => setCounts((c) => ({ ...c, [p.id]: val }))}
+                  info={
+                    <>
+                      Kutilgan <b className="tabular text-stone-700">{p.standQty}</b> · {som(p.sellPrice)}
+                    </>
+                  }
+                  extra={
+                    <>
+                      {v !== null && sold > 0 && <div className="text-xs font-semibold text-emerald-700">Sotildi: {sold} ta = {som(sold * p.sellPrice)}</div>}
+                      {v !== null && sold < 0 && <div className="text-xs font-semibold text-amber-700">Kutilganidan {-sold} ta koʻp</div>}
+                    </>
+                  }
+                />
               );
             })}
             {list.length === 0 && <div className="p-4 text-center text-sm text-stone-500">Topilmadi</div>}
@@ -163,7 +170,7 @@ export function StandCountPage() {
         <div className="space-y-2">
           {preview.map(({ p, counted, sold, surplus, revenue }) => (
             <div key={p.id} className="flex items-center justify-between gap-2 text-sm">
-              <span className="flex-1 truncate">{p.name}</span>
+              <span className="flex-1 leading-snug [overflow-wrap:anywhere]">{p.name}</span>
               <span className="tabular text-stone-500">
                 {p.standQty} → {counted}
               </span>

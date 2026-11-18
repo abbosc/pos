@@ -132,6 +132,7 @@ export async function listMovements(db: DB, raw: unknown) {
       unitCost: stockMovements.unitCost,
       purchaseId: stockMovements.purchaseId,
       standCountId: stockMovements.standCountId,
+      reason: stockMovements.reason,
       note: stockMovements.note,
       createdAt: stockMovements.createdAt,
     })

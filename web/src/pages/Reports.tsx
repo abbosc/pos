@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Empty, ErrorBox, Field, Icon, Page, Section, Spinner, Stat, Tabs, TextInput, cx } from '../components/ui';
-import { api, type Summary } from '../lib/api';
+import { REASON_LABEL, api, type Summary } from '../lib/api';
 import { addDays, dayLabel, num, som, todayIso } from '../lib/format';
 
 type Preset = 'today' | 'yesterday' | 'week' | 'month' | 'lastMonth' | 'custom';
@@ -126,9 +126,20 @@ function Totals({ s }: { s: Summary }) {
         <Line label={`Sovgʻalar (${t.giftQty} ta)`} value={minus(t.giftCost)} />
         <Line label="Sneklar savdosi" value={som(t.snackRevenue)} />
         <Line label="Sneklar tannarxi" value={minus(t.snackCost)} />
-        {t.writeoffCost > 0 && <Line label="Hisobdan chiqarilgan" value={minus(t.writeoffCost)} />}
+        {s.writeoffsByReason.map((w) => (
+          <Line key={w.reason} label={`${REASON_LABEL[w.reason]} (${w.qty} ta snek)`} value={minus(w.cost)} />
+        ))}
         <Line label="Foyda" value={som(t.grossProfit)} bold />
       </Card>
+      {s.containerUsage.length > 0 && (
+        <Card className="mt-3 py-1 text-sm">
+          <div className="divide-y divide-bean-50">
+            {s.containerUsage.map((c) => (
+              <Line key={c.id} label={`${c.name} ishlatildi`} value={`${num(c.used)} ta`} />
+            ))}
+          </div>
+        </Card>
+      )}
       {t.drinksMissingCost > 0 && (
         <Link to="/ichimliklar" className="mt-3 flex gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
           <Icon name="warn" className="size-5 shrink-0" />
