@@ -245,7 +245,7 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
             Sozlash
           </Link>
         </div>
-        <p className="mt-1 text-xs text-stone-500">Bugun ishlatilgan butilka va chashkalarni sanab, “Sanalgan”ga kiriting — varaqdagi son bilan mos kelishi kerak.</p>
+        <p className="mt-1 text-xs text-stone-500">Bugun ishlatilgan stakan va chashkalarni sanab, “Sanalgan”ga kiriting — varaqdagi son bilan mos kelishi kerak.</p>
         {noContainer.length > 0 && (
           <Link to="/idishlar" className="mt-3 flex gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
             <Icon name="warn" className="size-5 shrink-0" />

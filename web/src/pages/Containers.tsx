@@ -5,7 +5,7 @@ import { Badge, Button, Card, Empty, ErrorBox, Field, Icon, Modal, MoneyInput, N
 import { api, type Container, type ContainerMovement, type Drink } from '../lib/api';
 import { dateTime, relativeDay, som } from '../lib/format';
 
-/** "Kraft butilka" → "Kraft", so the choices fit on one line on phones. */
+/** "Kraft stakan" → "Kraft", so the choices fit on one line on phones. */
 const shortName = (name: string) => name.split(' ')[0] ?? name;
 
 type Action = { kind: 'receive' | 'count' | 'writeoff'; container: Container };
@@ -26,7 +26,7 @@ export function ContainersPage() {
   return (
     <Page title="Idishlar" back="/yana">
       <p className="-mt-2 mb-3 text-sm text-stone-600">
-        Butilka va chashkalar. Ichimliklar varagʻi saqlanganda ishlatilganlari ombordan avtomatik ayiriladi.
+        Stakan va chashkalar. Ichimliklar varagʻi saqlanganda ishlatilganlari ombordan avtomatik ayiriladi.
       </p>
       {containers.isPending ? (
         <Spinner />
@@ -41,7 +41,7 @@ export function ContainersPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="font-semibold text-bean-900">{c.name}</div>
-                    <div className="text-xs text-stone-500">{c.isCup ? 'Kofe chashkada berilganda' : 'Butilka'}</div>
+                    <div className="text-xs text-stone-500">{c.isCup ? 'Kofe chashkada berilganda' : 'Stakan'}</div>
                   </div>
                   <div className="text-right">
                     <div className={cx('tabular text-2xl font-bold', c.stockQty < 0 ? 'text-red-700' : low ? 'text-amber-700' : 'text-bean-900')}>{c.stockQty}</div>
@@ -103,7 +103,7 @@ function DrinkAssignments({ containers }: { containers: Container[] }) {
   return (
     <Section title="Ichimliklar idishi">
       <p className="mb-2 px-1 text-xs text-stone-500">
-        Har bir ichimlik qaysi butilkada berilishini tanlang.{cup && <> “+ {shortName(cup.name)}” belgilansa, varaqda “Chashkada” ustuni chiqadi (kofe chashkada ham berilsa).</>}
+        Har bir ichimlik qaysi stakanda berilishini tanlang.{cup && <> “+ {shortName(cup.name)}” belgilansa, varaqda “Chashkada” ustuni chiqadi (kofe chashkada ham berilsa).</>}
       </p>
       {missing > 0 && <p className="mb-2 px-1 text-xs font-semibold text-amber-700">{missing} ta ichimlikka idish tanlanmagan</p>}
       {drinks.isPending ? (

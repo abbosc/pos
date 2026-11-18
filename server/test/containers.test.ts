@@ -6,8 +6,8 @@ const t = setupApp();
 
 async function setup() {
   const containers = await t.ok('GET', '/api/containers');
-  const kraft = containers.find((c: any) => c.name === 'Kraft butilka');
-  const clear = containers.find((c: any) => c.name === 'Shaffof butilka');
+  const kraft = containers.find((c: any) => c.name === 'Kraft stakan');
+  const clear = containers.find((c: any) => c.name === 'Shaffof stakan');
   const cup = containers.find((c: any) => c.isCup);
   const drinks = await t.ok('GET', '/api/drinks');
   const latte = drinks.find((d: any) => d.name === 'Latte');
@@ -110,7 +110,7 @@ describe('containers', () => {
     await t.ok('PATCH', `/api/drinks/${latte.id}`, { containerId: kraft.id });
     await t.ok('PUT', `/api/sheets/${today()}`, { lines: [{ drinkId: latte.id, soldQty: 7, giftQty: 1 }] });
     const rep = await t.ok('GET', `/api/reports/summary?from=${today()}&to=${today()}`);
-    expect(rep.containerUsage).toEqual([{ id: kraft.id, name: 'Kraft butilka', used: 8 }]);
+    expect(rep.containerUsage).toEqual([{ id: kraft.id, name: 'Kraft stakan', used: 8 }]);
   });
 });
 

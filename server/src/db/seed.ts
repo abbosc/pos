@@ -42,8 +42,8 @@ export async function seedDefaults(db: DB) {
 }
 
 export const DEFAULT_CONTAINERS = [
-  { name: 'Kraft butilka', isCup: false, sortOrder: 10 },
-  { name: 'Shaffof butilka', isCup: false, sortOrder: 20 },
+  { name: 'Kraft stakan', isCup: false, sortOrder: 10 },
+  { name: 'Shaffof stakan', isCup: false, sortOrder: 20 },
   { name: 'Chashka', isCup: true, sortOrder: 30 },
 ];
 

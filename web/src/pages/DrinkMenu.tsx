@@ -182,7 +182,7 @@ function DrinkModal({ drink, groups, onClose }: { drink: Drink | null; groups: s
             </>
           )}
         </p>
-        <Field label="Idish" hint="Bu ichimlik doim shu butilkada beriladi">
+        <Field label="Idish" hint="Bu ichimlik doim shu stakanda beriladi">
           <Select value={containerId ?? ''} onChange={(e) => setContainerId(e.target.value ? Number(e.target.value) : null)}>
             <option value="">Tanlanmagan</option>
             {(containers.data ?? [])
