@@ -15,6 +15,13 @@
       "when": 1794968707549,
       "tag": "0001_containers_and_writeoff_reasons",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794969464493,
+      "tag": "0002_rename_cup_to_chashka",
+      "breakpoints": true
     }
   ]
 }

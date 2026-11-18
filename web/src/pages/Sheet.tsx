@@ -153,7 +153,7 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
         </div>
       )}
       {!sheet.exists && !locked && (
-        <p className="-mt-1 mb-3 text-sm text-stone-600">Qogʻoz varaqdagi “Sotildi”, “Sovgʻa” va stakanda berilganlar sonini kiriting.</p>
+        <p className="-mt-1 mb-3 text-sm text-stone-600">Qogʻoz varaqdagi “Sotildi”, “Sovgʻa” va chashkada berilganlar sonini kiriting.</p>
       )}
 
       <div className="space-y-4">
@@ -166,7 +166,7 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
                 <div className="mt-1 grid grid-cols-3 gap-2 text-center text-[11px] font-medium text-stone-500">
                   <span>Sotildi</span>
                   <span>Sovgʻa</span>
-                  <span>{anyCup ? 'Stakanda' : ''}</span>
+                  <span>{anyCup ? 'Chashkada' : ''}</span>
                 </div>
               </div>
               <div className="divide-y divide-bean-50">
@@ -198,14 +198,14 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
                             value={r.cup}
                             disabled={locked}
                             placeholder="0"
-                            aria-label={`${l.name} stakanda`}
+                            aria-label={`${l.name} chashkada`}
                             onChange={(x) => set(l.drinkId, 'cup', x)}
                           />
                         ) : (
                           <span />
                         )}
                       </div>
-                      {cupBad && <p className="mt-1 text-xs text-red-700">Stakandagilar sotilgan + sovgʻadan koʻp boʻlishi mumkin emas</p>}
+                      {cupBad && <p className="mt-1 text-xs text-red-700">Chashkadagilar sotilgan + sovgʻadan koʻp boʻlishi mumkin emas</p>}
                     </div>
                   );
                 })}
@@ -228,7 +228,7 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
         </div>
         {totals.cup > 0 && (
           <div className="flex justify-between text-sm text-stone-600">
-            <span>Shundan stakanda</span>
+            <span>Shundan chashkada</span>
             <span className="tabular">{totals.cup} ta</span>
           </div>
         )}
@@ -245,7 +245,7 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
             Sozlash
           </Link>
         </div>
-        <p className="mt-1 text-xs text-stone-500">Bugun ishlatilgan butilka va stakanlarni sanab, “Sanalgan”ga kiriting — varaqdagi son bilan mos kelishi kerak.</p>
+        <p className="mt-1 text-xs text-stone-500">Bugun ishlatilgan butilka va chashkalarni sanab, “Sanalgan”ga kiriting — varaqdagi son bilan mos kelishi kerak.</p>
         {noContainer.length > 0 && (
           <Link to="/idishlar" className="mt-3 flex gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
             <Icon name="warn" className="size-5 shrink-0" />
@@ -277,7 +277,7 @@ function SheetForm({ sheet }: { sheet: Sheet }) {
         </div>
         {containers.some((c) => counted[c.id] != null && counted[c.id] !== (usage.get(c.id) ?? 0)) && (
           <p className="mt-3 rounded-xl bg-red-50 p-3 text-xs text-red-800">
-            Mos kelmadi. Ortiqcha idish ishlatilgan boʻlsa — varaqda yozilmagan ichimlik boʻlishi mumkin. Kam boʻlsa — varaqda ortiqcha yozilgan yoki stakan ustuni toʻldirilmagan.
+            Mos kelmadi. Ortiqcha idish ishlatilgan boʻlsa — varaqda yozilmagan ichimlik boʻlishi mumkin. Kam boʻlsa — varaqda ortiqcha yozilgan yoki “Chashkada” ustuni toʻldirilmagan.
           </p>
         )}
       </Card>

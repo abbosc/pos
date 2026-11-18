@@ -20,7 +20,7 @@ describe('containers', () => {
     const { kraft, clear, cup } = await setup();
     expect(kraft).toBeTruthy();
     expect(clear).toBeTruthy();
-    expect(cup?.name).toBe('Stakan');
+    expect(cup?.name).toBe('Chashka');
   });
 
   it('PATCH changes only the fields sent', async () => {

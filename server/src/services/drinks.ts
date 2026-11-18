@@ -209,7 +209,7 @@ export async function saveSheet(db: DB, date: string, raw: unknown) {
       const d = drinkBy.get(l.drinkId);
       if (!d) throw notFound('Ichimlik');
       if (l.cupQty > l.soldQty + l.giftQty) {
-        throw new AppError(400, `${d.name}: stakandagilar soni sotilgan va sovgʻadan koʻp boʻlishi mumkin emas`);
+        throw new AppError(400, `${d.name}: chashkadagilar soni sotilgan va sovgʻadan koʻp boʻlishi mumkin emas`);
       }
       const prev = existingBy.get(l.drinkId);
       values.push({

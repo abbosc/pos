@@ -194,7 +194,7 @@ function DrinkModal({ drink, groups, onClose }: { drink: Drink | null; groups: s
               ))}
           </Select>
         </Field>
-        <Toggle checked={allowCup} onChange={setAllowCup} label="Stakanda ham beriladi" hint="Varaqda “Stakanda” ustuni chiqadi (kofe uchun)" />
+        <Toggle checked={allowCup} onChange={setAllowCup} label="Chashkada ham beriladi" hint="Varaqda “Chashkada” ustuni chiqadi (kofe uchun)" />
         <Field label="Tartib raqami" hint="Kichik raqam roʻyxatda yuqorida turadi">
           <NumberInput value={sortOrder} onChange={setSortOrder} placeholder="avtomatik" />
         </Field>
