@@ -14,6 +14,11 @@
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
+:root {
+  /* Light design only: opt out of browsers' automatic dark mode. */
+  color-scheme: only light;
+}
+
 html {
   -webkit-tap-highlight-color: transparent;
   background: var(--color-bean-50);
