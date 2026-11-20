@@ -3,7 +3,8 @@
 ## Televizordagi menyu
 
 Televizor brauzerida **bar.sodiqschool.uz/menyu** ni oching (yoki kirish sahifasidagi **“Menyu (TV uchun)”** tugmasi) → **Toʻliq ekran**. Parol kerak emas.
-Narxlar har daqiqada oʻzi yangilanadi. Faol boʻlmagan ichimliklar va tugagan sneklar menyuda koʻrinmaydi.
+Menyuda faqat ichimliklar. Narxlar har daqiqada oʻzi yangilanadi; faol boʻlmagan ichimliklar koʻrinmaydi.
+**“TAVSIYA”** belgisi: Yana → Ichimliklar menyusi → ichimlik → **Tavsiya**. Ichimlikka rasm qoʻshsangiz, u TV’dagi rasm kartochkalarida ham aylanib chiqadi.
 
 ## Kun davomida
 

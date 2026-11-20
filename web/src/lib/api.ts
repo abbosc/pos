@@ -114,6 +114,7 @@ export type Drink = {
   costPerCup: number | null;
   containerId: number | null;
   allowCup: boolean;
+  featured: boolean;
   imagePath: string | null;
   sortOrder: number;
   active: boolean;

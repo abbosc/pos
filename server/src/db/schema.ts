@@ -141,6 +141,8 @@ export const drinks = pgTable(
     containerId: integer('container_id').references(() => containers.id, { onDelete: 'set null' }),
     /** Can also be served in a cup (coffee). */
     allowCup: boolean('allow_cup').notNull().default(false),
+    /** Recommended: shown with a “TAVSIYA” badge on the TV menu. */
+    featured: boolean('featured').notNull().default(false),
     imagePath: text('image_path'),
     sortOrder: integer('sort_order').notNull().default(0),
     active: boolean('active').notNull().default(true),

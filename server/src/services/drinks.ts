@@ -13,6 +13,7 @@ export const drinkInput = z.object({
   costPerCup: money.nullable().default(null),
   containerId: id.nullable().default(null),
   allowCup: z.boolean().default(false),
+  featured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
   active: z.boolean().default(true),
 });

@@ -55,6 +55,7 @@ export function DrinkMenuPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-sm leading-snug font-semibold [overflow-wrap:anywhere]">{d.name}</span>
+                        {d.featured && <Badge tone="warn">Tavsiya</Badge>}
                         {!d.active && <Badge tone="muted">Faol emas</Badge>}
                       </div>
                       <div className="text-xs text-stone-500">
@@ -92,11 +93,12 @@ function DrinkModal({ drink, groups, onClose }: { drink: Drink | null; groups: s
   const [active, setActive] = useState(drink?.active ?? true);
   const [containerId, setContainerId] = useState<number | null>(drink?.containerId ?? null);
   const [allowCup, setAllowCup] = useState(drink?.allowCup ?? false);
+  const [featured, setFeatured] = useState(drink?.featured ?? false);
   const containers = useQuery({ queryKey: ['containers'], queryFn: () => api.get<Container[]>('/containers') });
 
   const save = useMutation({
     mutationFn: () => {
-      const body = { name, groupName, price, costPerCup, containerId, allowCup, active, ...(sortOrder !== null ? { sortOrder } : {}) };
+      const body = { name, groupName, price, costPerCup, containerId, allowCup, featured, active, ...(sortOrder !== null ? { sortOrder } : {}) };
       return drink ? api.patch(`/drinks/${drink.id}`, body) : api.post('/drinks', body);
     },
     onSuccess: () => {
@@ -198,7 +200,8 @@ function DrinkModal({ drink, groups, onClose }: { drink: Drink | null; groups: s
         <Field label="Tartib raqami" hint="Kichik raqam roʻyxatda yuqorida turadi">
           <NumberInput value={sortOrder} onChange={setSortOrder} placeholder="avtomatik" />
         </Field>
-        <Toggle checked={active} onChange={setActive} label="Faol" hint="Faol boʻlmagan ichimlik varaqda koʻrinmaydi" />
+        <Toggle checked={featured} onChange={setFeatured} label="Tavsiya" hint="TV menyuda “TAVSIYA” belgisi bilan koʻrsatiladi. Rasmi boʻlsa, rasm kartochkasida ham chiqadi." />
+        <Toggle checked={active} onChange={setActive} label="Faol" hint="Faol boʻlmagan ichimlik varaqda va TV menyuda koʻrinmaydi" />
         {drink && drink.price !== price && (
           <p className="rounded-xl bg-bean-50 p-3 text-xs text-stone-600">Yangi narx bundan keyingi varaqlarga qoʻllanadi. Avval saqlangan varaqlar eski narxda qoladi.</p>
         )}

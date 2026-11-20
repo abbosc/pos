@@ -29,6 +29,13 @@
       "when": 1794969649308,
       "tag": "0003_rename_bottles_to_stakan",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795143148529,
+      "tag": "0004_drink_featured",
+      "breakpoints": true
     }
   ]
 }
