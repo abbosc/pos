@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="uz">
+<html lang="uz" translate="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#3b2416" />
+    <meta name="google" content="notranslate" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
@@ -12,6 +13,31 @@
   </head>
   <body>
     <div id="root"></div>
+    <!--
+      If the app does not start (e.g. a very old browser on a TV), show why instead of a blank page.
+      Plain old JavaScript on purpose, so it runs everywhere.
+    -->
+    <script>
+      (function () {
+        var errors = [];
+        window.addEventListener('error', function (e) {
+          errors.push((e && (e.message || (e.target && e.target.src))) || 'error');
+        }, true);
+        setTimeout(function () {
+          if (window.__posStarted) return;
+          var esc = function (t) { return String(t).replace(/[<>&]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]; }); };
+          var chrome = /Chrome\/(\d+)/.exec(navigator.userAgent);
+          var box = document.createElement('div');
+          box.id = 'boot-error';
+          box.setAttribute('style', 'font:18px/1.5 sans-serif;padding:24px;color:#3b2416;background:#faf7f2;min-height:100vh');
+          box.innerHTML =
+            '<h1 style="font-size:24px;margin:0 0 12px">Ilova ochilmadi</h1>' +
+            '<p>Brauzer eski boʻlishi mumkin' + (chrome ? ' (Chrome ' + chrome[1] + ')' : '') + '. Play Marketda Chrome’ni yangilang yoki sahifani qayta yuklang.</p>' +
+            '<p style="font-size:13px;color:#79716b;word-break:break-all">' + esc(navigator.userAgent) + '<br>' + esc(errors.slice(0, 5).join(' | ')) + '</p>';
+          document.body.appendChild(box);
+        }, 10000);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
