@@ -1,5 +1,10 @@
 # Qoʻllanma — Sodiq Coffee hisob tizimi
 
+## Televizordagi menyu
+
+Televizor brauzerida **bar.sodiqschool.uz/menyu** ni oching (yoki kirish sahifasidagi **“Menyu (TV uchun)”** tugmasi) → **Toʻliq ekran**. Parol kerak emas.
+Narxlar har daqiqada oʻzi yangilanadi. Faol boʻlmagan ichimliklar va tugagan sneklar menyuda koʻrinmaydi.
+
 ## Kun davomida
 
 | Nima boʻldi | Qayerda |

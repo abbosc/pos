@@ -30,6 +30,7 @@ Farq (difference) = counted cash − expected cash
 | Hisobot | `/hisobot` | Today / yesterday / week / month / last month / custom. Sales, profit, expenses, cash flow; daily sales chart; per drink, per snack, per expense category, per day tables |
 | Ombor tarixi | `/tarix` | Every stock movement, filterable |
 | Sovgʻa / yeyilgan | `/chiqim` | Snacks that left without a sale — gift, eaten by staff, spoiled, other — several products at once, from stand or warehouse. Must be entered before the stand count. Shown in reports by reason, at cost |
+| TV menyu | `/menyu` | Public (no login) full-screen menu for the TV: active drinks by group and snacks in stock, auto-sized to fit one screen, refreshed every minute, keeps the screen awake |
 | Idishlar | `/idishlar` | Kraft bottles, transparent bottles, cups: stock, receive (optional price → expense), count (shows difference), write-off, history. Each drink is assigned one bottle type, and "+ Chashka" if it can also be served in a cup |
 
 ### Bottles and cups

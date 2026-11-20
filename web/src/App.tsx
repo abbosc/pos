@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Spinner } from './components/ui';
 import { api } from './lib/api';
@@ -11,6 +11,7 @@ import { DrinkMenuPage } from './pages/DrinkMenu';
 import { ExpensesPage } from './pages/Expenses';
 import { HistoryPage } from './pages/History';
 import { LoginPage } from './pages/Login';
+import { MenuBoardPage } from './pages/MenuBoard';
 import { MorePage } from './pages/More';
 import { ProductDetailPage } from './pages/ProductDetail';
 import { ProductsPage } from './pages/Products';
@@ -22,6 +23,13 @@ import { StandCountPage } from './pages/StandCount';
 import { WriteOffPage } from './pages/WriteOff';
 
 export function App() {
+  // The TV menu is public: no login, no app chrome.
+  const { pathname } = useLocation();
+  if (pathname === '/menyu' || pathname.startsWith('/menyu/')) return <MenuBoardPage />;
+  return <AdminApp />;
+}
+
+function AdminApp() {
   const qc = useQueryClient();
   const me = useQuery({ queryKey: ['me'], queryFn: () => api.get<{ loggedIn: boolean }>('/auth/me'), staleTime: Infinity });
 

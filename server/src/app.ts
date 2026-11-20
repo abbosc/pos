@@ -18,6 +18,7 @@ import * as cash from './services/cash.js';
 import * as containersSvc from './services/containers.js';
 import * as drinks from './services/drinks.js';
 import * as expenses from './services/expenses.js';
+import { publicMenu } from './services/menu.js';
 import * as productsSvc from './services/products.js';
 import * as reports from './services/reports.js';
 import * as stock from './services/stock.js';
@@ -67,6 +68,12 @@ export function createApp(db: DB) {
     return c.json({ ok: true });
   });
   app.get('/api/auth/me', (c) => c.json({ loggedIn: isLoggedIn(c) }));
+
+  // Public (no login): the menu for the TV screen. Registered before the protected routes.
+  app.get('/api/public/menu', async (c) => {
+    c.header('Cache-Control', 'no-store');
+    return c.json(await publicMenu(db));
+  });
 
   const api = new Hono();
   api.use('*', requireAuth);

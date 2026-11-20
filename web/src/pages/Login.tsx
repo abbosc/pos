@@ -37,6 +37,16 @@ export function LoginPage() {
         <Button type="submit" size="lg" className="mt-4 w-full" loading={loading} disabled={!password}>
           Kirish
         </Button>
+        <a
+          href="/menyu"
+          className="mt-3 flex h-13 w-full items-center justify-center gap-2 rounded-xl border border-bean-200 text-base font-semibold text-bean-900 hover:bg-bean-50"
+        >
+          <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M3 5h18v12H3zM8 21h8M12 17v4" />
+          </svg>
+          Menyu (TV uchun)
+        </a>
+        <p className="mt-2 text-center text-xs text-stone-500">Parolsiz ochiladi — televizor brauzerida oching</p>
       </form>
     </div>
   );

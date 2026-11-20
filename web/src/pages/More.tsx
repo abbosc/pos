@@ -13,6 +13,7 @@ const LINKS = [
   { to: '/mahsulotlar', label: 'Mahsulotlar', sub: 'Sneklar, narxlar, rasmlar, qoldiq', icon: 'box' },
   { to: '/ichimliklar', label: 'Ichimliklar menyusi', sub: 'Narx va bir stakan tannarxi', icon: 'cup' },
   { to: '/tarix', label: 'Ombor tarixi', sub: 'Barcha xarid, sotuv va tuzatishlar', icon: 'history' },
+  { to: '/menyu', label: 'TV menyu', sub: 'bar.sodiqschool.uz/menyu — parolsiz, toʻliq ekran', icon: 'tv' },
 ];
 
 export function MorePage() {

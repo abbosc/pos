@@ -361,6 +361,7 @@ const PATHS: Record<string, string> = {
   left: 'M15 18l-6-6 6-6',
   right: 'M9 6l6 6-6 6',
   tag: 'M3 12V3h9l9 9-9 9zM7.5 7.5h.01',
+  tv: 'M3 5h18v12H3zM8 21h8M12 17v4',
   paste: 'M9 4h6v3H9zM9 5H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-3',
 };
 
