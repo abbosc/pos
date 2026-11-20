@@ -3,6 +3,8 @@
 ## Televizordagi menyu
 
 Televizor brauzerida **bar.sodiqschool.uz/menyu** ni oching (yoki kirish sahifasidagi **“Menyu (TV uchun)”** tugmasi) → **Toʻliq ekran**. Parol kerak emas.
+Menyu 2 sahifaga boʻlinadi (yozuvlar kattaroq), har biri 15 soniyadan almashadi.
+Sozlash havolada: **/menyu?vaqt=20** — har sahifa 20 soniya; **/menyu?sahifa=1** — hammasi bitta sahifada (yozuvlar kichikroq).
 Menyuda faqat ichimliklar. Narxlar har daqiqada oʻzi yangilanadi; faol boʻlmagan ichimliklar koʻrinmaydi.
 **“TAVSIYA”** belgisi: Yana → Ichimliklar menyusi → ichimlik → **Tavsiya**. Ichimlikka rasm qoʻshsangiz, u TV’dagi rasm kartochkalarida ham aylanib chiqadi.
 
